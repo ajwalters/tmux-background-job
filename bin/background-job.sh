@@ -19,7 +19,7 @@ tmux set-window-option -t$window window-status-fg white
 # Run the spec
 if ! eval $command; then
   # Show the error in the main pane
-  tmux join-pane -s$window -t1.0 -h
+  tmux join-pane -s$window -h
   tmux display-message "FAIL"
 else
   # Color the window green to signify the spec passed
