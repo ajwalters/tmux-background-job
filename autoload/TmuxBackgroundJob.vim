@@ -37,7 +37,7 @@ function! TmuxBackgroundJob#TmuxBackgroundJob()
   " Filename substitution
   let s:command = <SID>SpecialCharacterSubstitution(commands[menu_selection-1])
 
-  call RunBackgroundJob(s:command, s:runner_window)
+  call <SID>RunBackgroundJob(s:command, s:runner_window)
 endfunction
 
 function! TmuxBackgroundJob#TmuxRerunBackgroundJob()
