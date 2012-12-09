@@ -34,8 +34,9 @@ Sample file format:
 
 ```
 window: 999
-(1) - Current File  [bundle exec rspec %]
-(2) - Suite         [bundle exec rspec spec]
+(1) - Current File  [bundle exec rspec %F]
+(2) - Current Line  [bundle exec rspec %F:%L]
+(3) - Suite         [bundle exec rspec spec]
 ```
 
 ### Specifying the Window to Run Jobs
@@ -48,8 +49,9 @@ Using the same sample file specified above, you'll be presented with the menu:
 
 ```
 Please select:
-(1) - Current File  [bundle exec rspec %]
-(2) - Suite         [bundle exec rspec spec]
+(1) - Current File  [bundle exec rspec %F]
+(2) - Current Line  [bundle exec rspec %F:%L]
+(3) - Suite         [bundle exec rspec spec]
 Type number and <Enter> or click with mouse (empty cancels):
 ```
 
@@ -61,13 +63,16 @@ Text within `[]` will be executed when you choose that menu selection.  The comm
 There are some special characters which will have substituion perfomred on them.
 
 ##### Substitute Current File Into Command
-Within the `[]`, a `%` will be substituted with the file the vim cursor is focused on when `:TmuxBackgroundJob` is executed
+Within the `[]`, a `%F` will be substituted with the file the vim cursor is focused on when `:TmuxBackgroundJob` is executed
 
 For example:
-If the vim cursor is on the file `~/foo_spec.rb` when `:TmuxBackgroundJob` is executed, `[bundle exec rspec %]` becomes `bundle exec rspec ~/foo_spec.rb`
+If the vim cursor is on the file `~/foo_spec.rb` when `:TmuxBackgroundJob` is executed, `[bundle exec rspec %F]` becomes `bundle exec rspec ~/foo_spec.rb`
 
 #### Substitute Current Line Into Command
-_Coming Soon…_
+Within the `[]`, a `%L` will be substituted with the line number of the vim cursor when `:TmuxBackgroundJob` is executed
+
+For example:
+If the vim cursor is on line number 47 of the file `~/foo_spec.rb` when `:TmuxBackgroundJob` is executed, `[bundle exec rspec %F:%L]` becomes `bundle exec rspec ~/foo_spec.rb:47`
 
 ## Usage
 There are two commands for use: `TmuxBackgroundJob` and `TmuxRerunBackgroundJob`
