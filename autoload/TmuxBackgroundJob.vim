@@ -3,7 +3,7 @@
 if exists("g:loaded_TmuxBackgroundJob") || &cp
   finish
 endif
-let g:loaded_TmuxBackgroundJob= 1.0.0 " your version number
+let g:loaded_TmuxBackgroundJob= 2.0.0
 let s:background_job_exec = expand("<sfile>:h") . "/../bin/background-job.sh"
 
 function! TmuxBackgroundJob#TmuxBackgroundJob()
@@ -35,26 +35,30 @@ function! TmuxBackgroundJob#TmuxBackgroundJob()
   endwhile
 
   " Filename substitution
-  let s:command = substitute(commands[menu_selection-1], "%", expand("%"), "g")
+  let s:command = <SID>SpecialCharacterSubstitution(commands[menu_selection-1])
 
   call RunBackgroundJob(s:command, s:runner_window)
 endfunction
 
 function! TmuxBackgroundJob#TmuxRerunBackgroundJob()
   if exists("s:command") && exists("s:runner_window")
-    call RunBackgroundJob(s:command, s:runner_window)
+    call <SID>RunBackgroundJob(s:command, s:runner_window)
   else
     call TmuxBackgroundJob#TmuxBackgroundJob()
   endif
 endfunction
 
-function! RunBackgroundJob(command, runner_window)
+function! s:RunBackgroundJob(command, runner_window)
   " Create a window in the session
   call system("tmux new-window -dt ". a:runner_window)
 
   " Clear out current line and submit a:command
   let current_dir = system("pwd")
   let change_dir_cmd = "'ls ". " " . current_dir . "'"
-  "call system("tmux send-keys -Rt " . a:runner_window ." ". change_dir_cmd ." C-m")
   call system("tmux send-keys -Rt " . a:runner_window ." '". s:background_job_exec ." -w ". a:runner_window . " -c \"". a:command . "\"' C-m")
+endfunction
+
+function! s:SpecialCharacterSubstitution(command)
+  let modified_command = substitute(a:command, "%F", expand("%"), "g")
+  return substitute(modified_command, "%L", line("."), "g")
 endfunction
